@@ -9,6 +9,10 @@ Token::Token(Node* n)
 	playerTurn = 1;
 }
 
+Token::~Token()
+{
+}
+
 Node* Token::getTokenLocation()
 {
 	return location;

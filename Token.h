@@ -6,6 +6,7 @@
 class Token {
 public:
 	Token(Node*);
+    virtual ~Token();
 	Node* getTokenLocation();
 	void setTokenLocation(Node*);
 	int getCurrentPlayerTurn();

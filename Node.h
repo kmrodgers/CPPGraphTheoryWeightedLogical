@@ -12,15 +12,20 @@ public:
 	void setEdge(Node*, int);
 	int getWeight(Node*);
 	void destroyEdge(Node*);
-	bool edgeExists(int);
+	//bool edgeExists(int);
 	Node* getNodeAtElement(int);
     int getRandomNumber();
     //bool search(int);
 	int getEdgeListSize();
 	std::map<Node*, int> edgeList; //shows the node it's connected to, and the weight
+    int getDegree();
+    Node* getMinimalDegreeNode();
+    void removeEdgeWeight(Node*, int);
 	
 private:
 	int name;
+    int degree;
+    void setDegree();
 	
 };
 

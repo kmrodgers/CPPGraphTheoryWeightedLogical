@@ -31,11 +31,7 @@ CompleteGraph::CompleteGraph(int i, int numNodes, int weight, bool b, int k)
 	totalGames = k;
 	watch = b;
 	nodeNameCount = 0;
-	for (int j = 1; j <= numNodes ; j++)
-	{
-		createInitialNodes(j);
-		nodeNameCount++;
-	}
+	createInitialNodes(numNodes);
 	createInitialEdges();
 	game();
 }
@@ -69,10 +65,13 @@ void CompleteGraph::createInitialEdges()
 
 //Desc: Creates the initial Nodes
 //Input: int i, which is the name of the Node
-void CompleteGraph::createInitialNodes(int i)
+void CompleteGraph::createInitialNodes(int nodes)
 {
-	Node *n = new Node(i);
-	nodeList.push_back(n);
+	for (int i = 1; i <= nodes; i++)
+    {
+        Node *n = new Node(i);
+        nodeList.push_back(n);
+    }
 }
 
 void CompleteGraph::removeEdge()
@@ -157,7 +156,10 @@ void CompleteGraph::rotateBar()
 
 void CompleteGraph::game()
 {
-	std::ofstream master_data;
+/*    std::cout << edgeWeight << std::endl;
+	for (std::list<Node*>::iterator iter = nodeList.begin(); iter != nodeList.end(); iter++)
+        std::cout << (*iter)->getDegree() << std::endl;
+*/    std::ofstream master_data;
 	//master_data.open("logs/log.txt");
 	
 	
@@ -180,11 +182,17 @@ void CompleteGraph::game()
 		master_data << (t->getTokenLocation())->getName() << "-";
 		while (true)
 		{
-    	    nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize()); // inside () returns an int the size of possible nodes to go to
-        	nextMoveNode = t->getTokenLocation()->getNodeAtElement(nextMove);     // sets node at based in this number
+    	    nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize());
+        	nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();     // sets node at based in this number
 	        edgeSize = t->getTokenLocation()->getWeight(nextMoveNode);
-	        nextRandomWeight = getRandomEdge(edgeSize);
-			if (nextRandomWeight > 0)
+            nextRandomWeight = getRandomEdge(edgeSize);
+            nextRandomWeight = 1;
+            if (nextRandomWeight == 0)
+		    {
+		    	t->getTokenLocation()->destroyEdge(nextMoveNode);
+	    		nextMoveNode->destroyEdge(t->getTokenLocation());
+		    }
+            else if (nextRandomWeight > 0)
         	{
         		master_data << nextRandomWeight << "-";
         		(t->getTokenLocation())->setEdge(nextMoveNode, nextMoveNode->getWeight(t->getTokenLocation()) - nextRandomWeight);
@@ -195,11 +203,6 @@ void CompleteGraph::game()
 		        t->setTokenLocation(nextMoveNode);
 		        master_data << (t->getTokenLocation())->getName() << "-";
 		    }
-			else if (nextRandomWeight == 0)
-		    {
-		    	t->getTokenLocation()->destroyEdge(nextMoveNode);
-	    		nextMoveNode->destroyEdge(t->getTokenLocation());
-		    }
     	    if (t->getTokenLocation()->getEdgeListSize() == 0)
 			{
 				//moves += std::to_string((t->getTokenLocation())->getName());
@@ -209,6 +212,7 @@ void CompleteGraph::game()
 				master_data << t->getCurrentPlayerTurn() << std::endl;		
 				std::cout << "Player " << t->getCurrentPlayerTurn() << " wins!" << std::endl;
 				std::cout << std::endl;
+                delete t;
 				break;
 			}
 		}
@@ -220,26 +224,24 @@ void CompleteGraph::game()
 		{
 			rotateBar();
     	    nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize()); // inside () returns an int the size of possible nodes to go to
-	        nextMoveNode = t->getTokenLocation()->getNodeAtElement(nextMove);     // sets node at based in this number
+	        nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();     // sets node at based in this number
     	    edgeSize = t->getTokenLocation()->getWeight(nextMoveNode);
         	nextRandomWeight = getRandomEdge(edgeSize);
-			if (nextRandomWeight > 0)
+            if (nextRandomWeight > 0)
     	    {
     	    	master_data << nextRandomWeight << "-";
-        		(t->getTokenLocation())->setEdge(nextMoveNode, nextMoveNode->getWeight(t->getTokenLocation()) - nextRandomWeight);
-	        	(nextMoveNode)->setEdge(t->getTokenLocation(), t->getTokenLocation()->getWeight(nextMoveNode) - nextRandomWeight);
-//    		    std::cout << "Player " << t->getCurrentPlayerTurn() << " removed edge " << (t->getTokenLocation())->getName() << " - " << nextRandomWeight << " - " << (nextMoveNode)->getName() << std::endl;
-		        //master_data << "Player " << t->getCurrentPlayerTurn() << " removed edge " << (t->getTokenLocation())->getName() << " - " << (nextMoveNode)->getName() << std::endl;
+        		(t->getTokenLocation())->removeEdgeWeight(nextMoveNode, nextRandomWeight);
+	        	(nextMoveNode)->removeEdgeWeight(t->getTokenLocation(), nextRandomWeight);
     		    t->setPlayerTurn();
 	        	t->setTokenLocation(nextMoveNode);
        			master_data << (t->getTokenLocation())->getName() << "-";
 	    	}
-			else if (nextRandomWeight == 0)
+/*            else if (nextRandomWeight == 0)
 		    {
 	    		t->getTokenLocation()->destroyEdge(nextMoveNode);
 	    		nextMoveNode->destroyEdge(t->getTokenLocation());
 		    }
-    	    if (t->getTokenLocation()->getEdgeListSize() == 0)
+*/    	    if (t->getTokenLocation()->getEdgeListSize() == 0)
 			{
 				//moves += std::to_string((t->getTokenLocation())->getName());
 				t->setPlayerTurn();
@@ -248,10 +250,10 @@ void CompleteGraph::game()
 				master_data << t->getCurrentPlayerTurn() << std::endl;		
 //				std::cout << "Player " << t->getCurrentPlayerTurn() << " wins!" << std::endl;
 //				std::cout << std::endl;
+                delete t;
 				break;
-		}
-	}	
-	delete t;
-	master_data.close();
-	}
+            }
+        }
+        master_data.close();
+    }
 }

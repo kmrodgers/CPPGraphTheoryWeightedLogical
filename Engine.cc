@@ -9,6 +9,7 @@
 #include <fstream>	
 
 #include <vector>
+#include <map>
 
 const std::string master_data_path = "output_data/master_data.txt";
 const std::string player1_data_path = "output_data/player1_moves.txt";
@@ -86,6 +87,11 @@ void Engine::startMenuChoices(int choice)
 		std::cout << std::endl;
 		createCompleteGraph(numGamesToPlay, numNodes, edgeWeight, watch);
 	}
+    else if (choice == 3)
+    {
+        std::cout << "Thank you for using this program!" << std::endl;
+        exit(0);
+    }
 }
 
 void Engine::parseMasterData()
@@ -115,7 +121,7 @@ void Engine::parseMasterData()
 			parseLine.pop_back();
 			p1 << parseLine << std::endl;
 			if (parseLine.size() > longestGame)
-				longestGame = parseLine.size();
+				longestGame = (int)parseLine.size();
 		}
 		else if(*(iter) == '2')
 		{
@@ -124,7 +130,7 @@ void Engine::parseMasterData()
 			parseLine.pop_back();
 			p2 << parseLine << std::endl;
 			if (parseLine.size() > longestGame)
-				longestGame = parseLine.size();
+				longestGame = (int)parseLine.size();
 		}
 		master.clear();
 	}
@@ -177,25 +183,29 @@ void Engine::dataAnalysis(int choice)
 //	p2_logical.open(player2_logical_data_path);
 	results.open(results_data_path);
 	std::string testLine;
-	std::vector<std::string> player1moves;
-	std::vector<std::string> player2moves;
-	std::vector<std::string> player1logicalmoves;
-	std::vector<std::string> player2logicalmoves;
+	std::map<std::string, int> player1moves;
+	std::map<std::string, int> player2moves;
+	std::map<std::string, int> player1logicalmoves;
+	std::map<std::string, int> player2logicalmoves;
 	while (std::getline(p1, testLine))
 	{
 		rotateBarAnalyzeP1();
-		std::vector<std::string>::iterator it = find(player1moves.begin(), player1moves.end(), testLine);
-		if (it == player1moves.end())
-			player1moves.push_back(testLine);
+		std::map<std::string, int>::iterator it = player1moves.find(testLine);
+        if (testLine == it->first)
+            (it->second)++;
+		else if (it == player1moves.end())
+			player1moves[testLine] = 1;
 		testLine.clear();
 	}
 	std::cout << "\nPlayer 1 data analyzed successfully!" << std::endl;
 	while (std::getline(p2, testLine))
 	{
 		rotateBarAnalyzeP2();
-		std::vector<std::string>::iterator it = find(player2moves.begin(), player2moves.end(), testLine);
-		if (it == player2moves.end())
-			player2moves.push_back(testLine);
+        std::map<std::string, int>::iterator it = player2moves.find(testLine);
+        if (testLine == it->first)
+            (it->second)++;
+		else if (it == player2moves.end())
+			player2moves[testLine] = 1;
 		testLine.clear();
 	}
 	std::cout << "\nPlayer 2 data analyzed successfully!" << std::endl;
@@ -203,9 +213,9 @@ void Engine::dataAnalysis(int choice)
 	results << std::endl;
 	p1.close();
 	p2.close();
-	std::sort(player1moves.begin(), player1moves.end());
-	std::sort(player2moves.begin(), player2moves.end());
-	std::ofstream p1unique;
+//	std::sort(player1moves.begin(), player1moves.end());
+//	std::sort(player2moves.begin(), player2moves.end());
+/*	std::ofstream p1unique;
 	std::ofstream p2unique;
 	p1unique.open(player1_unique_moves);
 	p2unique.open(player2_unique_moves);
@@ -215,7 +225,7 @@ void Engine::dataAnalysis(int choice)
 		p2unique << *it << std::endl;
 	p1unique.close();
 	p2unique.close();
-	int numberOfGamesPlayed = choice;
+*/	int numberOfGamesPlayed = choice;
 	std::cout << "-----------------------------------------------" << std::endl;
 	results << "-----------------------------------------------" << std::endl;
 	std::cout << "\nGame Analysis" << std::endl;
@@ -247,10 +257,10 @@ void Engine::dataAnalysis(int choice)
 	{
 		std::cout << "The following moves led to Player 1's victory:" << std::endl;
 		results << "The following moves led to Player 1's victory:" << std::endl;
-		for (std::vector<std::string>::iterator i = player1moves.begin(); i != player1moves.end(); i++)
+		for (std::map<std::string, int>::iterator i = player1moves.begin(); i != player1moves.end(); i++)
 		{
-			std::cout << *i << std::endl;
-			results << *i << std::endl;
+			std::cout << i->first << " " << i->second << std::endl;
+			results << i->first << " " << i->second << std::endl;
 	//		if (i->size() > longestGame)
 	//			longestGame = i->size();	
 		}
@@ -258,10 +268,10 @@ void Engine::dataAnalysis(int choice)
 		results << std::endl;
 		std::cout << "The following moves led to Player 2's victory:" << std::endl;
 		results << "The following moves led to Player 2's victory:" << std::endl;
-		for (std::vector<std::string>::iterator i = player2moves.begin(); i != player2moves.end(); i++)
+		for (std::map<std::string, int>::iterator i = player2moves.begin(); i != player2moves.end(); i++)
 		{
-			std::cout << *i << std::endl;
-			results << *i << std::endl;
+			std::cout << i->first << " " << i->second << std::endl;
+			results << i->first << " " << i->second << std::endl;
 //			if (i->size() > longestGame)
 //				longestGame = i->size();
 		}
@@ -271,17 +281,17 @@ void Engine::dataAnalysis(int choice)
 	else
 	{
 		results << "The following moves led to Player 1's victory:" << std::endl;
-		for (std::vector<std::string>::iterator i = player1moves.begin(); i != player1moves.end(); i++)
+		for (std::map<std::string, int>::iterator i = player1moves.begin(); i != player1moves.end(); i++)
 		{
-			results << *i << std::endl;
+            results << i->first << " " << i->second << std::endl;
 	//		if (i->size() > longestGame)
 	//			longestGame = i->size();	
 		}
 		results << std::endl;
 		results << "The following moves led to Player 2's victory:" << std::endl;
-		for (std::vector<std::string>::iterator i = player2moves.begin(); i != player2moves.end(); i++)
+		for (std::map<std::string, int>::iterator i = player2moves.begin(); i != player2moves.end(); i++)
 		{
-			results << *i << std::endl;
+			results << i->first << " " << i->second << std::endl;
 //			if (i->size() > longestGame)
 //				longestGame = i->size();
 		}

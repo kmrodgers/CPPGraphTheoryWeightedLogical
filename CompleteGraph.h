@@ -23,6 +23,7 @@ public:
     int getRandomNumber(int);
     int getRandomEdge(int);
     int gameNumber;
+//    typedef pair<int, int> edgeweightNodeDegree;
     
 private:
 	int nodeNameCount; //Keeps track of what the name of the next Node will be

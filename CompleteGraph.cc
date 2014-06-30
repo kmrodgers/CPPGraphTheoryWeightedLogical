@@ -182,8 +182,13 @@ void CompleteGraph::game()
 		master_data << (t->getTokenLocation())->getName() << "-";
 		while (true)
 		{
-    	    nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize());
-        	nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();     // sets node at based in this number
+            if (t->getCurrentPlayerTurn() == 2)
+            {
+                nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize());
+                nextMoveNode = t->getTokenLocation()->getNodeAtElement(nextMove);
+            }
+            else
+                nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();     // sets node at based in this number
 	        edgeSize = t->getTokenLocation()->getWeight(nextMoveNode);
             nextRandomWeight = getRandomEdge(edgeSize);
             nextRandomWeight = 1;
@@ -223,8 +228,13 @@ void CompleteGraph::game()
 		while (true)
 		{
 			rotateBar();
-    	    nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize()); // inside () returns an int the size of possible nodes to go to
-	        nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();     // sets node at based in this number
+            if (t->getCurrentPlayerTurn() == 2)
+            {
+                nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize());
+                nextMoveNode = t->getTokenLocation()->getNodeAtElement(nextMove);
+            }
+            else
+                nextMoveNode = t->getTokenLocation()->getMinimalDegreeNode();
     	    edgeSize = t->getTokenLocation()->getWeight(nextMoveNode);
         	nextRandomWeight = getRandomEdge(edgeSize);
             if (nextRandomWeight > 0)

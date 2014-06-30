@@ -2,6 +2,7 @@
 #define GUARD_Node_h
 
 #include <map>
+#include <unordered_map>
 
 class Node {
 public:
@@ -18,14 +19,15 @@ public:
     //bool search(int);
 	int getEdgeListSize();
 	std::map<Node*, int> edgeList; //shows the node it's connected to, and the weight
+    std::unordered_map<Node*, int> nodeList;
     int getDegree();
     Node* getMinimalDegreeNode();
     void removeEdgeWeight(Node*, int);
+    void setDegree();
 	
 private:
 	int name;
     int degree;
-    void setDegree();
 	
 };
 

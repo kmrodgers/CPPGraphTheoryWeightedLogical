@@ -4,6 +4,7 @@
 #include <map>
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
 
 
 Node::Node(int n)
@@ -46,18 +47,20 @@ int Node::getEdgeListSize()
 
 Node* Node::getMinimalDegreeNode()
 {
-    std::map<Node*, int>::iterator minimalDegreeNode = edgeList.begin();
     for (std::map<Node*, int>::iterator iter = edgeList.begin(); iter != edgeList.end(); iter++)
     {
         iter->first->setDegree();
     }
-    for (std::map<Node*, int>::iterator iter = edgeList.begin(); iter != edgeList.end(); iter++)
+    std::map<Node*, int>::iterator minimalDegreeNode = edgeList.begin();
+    std::map<Node*, int>::iterator iter = edgeList.begin();
+    std::advance(iter, 1);
+    while (iter != edgeList.end())
     {
-//        if (minimalDegreeNode->second > iter->second && iter->second > 0)
-        if (minimalDegreeNode->second > iter->second)
+        if (iter->first->getDegree() < minimalDegreeNode->first->getDegree())
         {
             minimalDegreeNode = iter;
         }
+        ++iter;
     }
     return minimalDegreeNode->first;
 }
@@ -71,7 +74,8 @@ Node* Node::getNodeAtElement(int i)
 
 void Node::setEdge(Node* n1, int weight)
 {
-	edgeList[n1] = weight;
+	nodeList.insert(std::make_pair(n1, n1->getName()));
+    edgeList[n1] = weight;
 //	if (edgeList[n1] == 0)
 //		destroyEdge(n1);
 }
@@ -108,7 +112,7 @@ int Node::getWeight(Node* n1)
 				break;
 		}
 	}
-	return -1;
+	return 0;
 }
 
 void Node::removeEdgeWeight(Node* n1, int amount)

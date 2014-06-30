@@ -6,7 +6,7 @@
 #include <string>
 #include <cstdio>
 #include <ctime>
-#include <fstream>	
+#include <fstream>
 
 #include <vector>
 #include <map>

@@ -228,6 +228,10 @@ void CompleteGraph::game()
 		while (true)
 		{
 			rotateBar();
+            for (std::list<Node*>::iterator iter = nodeList.begin(); iter != nodeList.end(); iter++)
+                (*iter)->setDegree();
+//            for (std::list<Node*>::iterator iter = nodeList.begin(); iter != nodeList.end(); iter++)
+//                std::cout << "Node: " << (*iter)->getName() << " Degree: " << (*iter)->getDegree() << std::endl;
             if (t->getCurrentPlayerTurn() == 2)
             {
                 nextMove = getRandomNumber(t->getTokenLocation()->getEdgeListSize());

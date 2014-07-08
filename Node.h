@@ -2,7 +2,6 @@
 #define GUARD_Node_h
 
 #include <map>
-#include <unordered_map>
 
 class Node {
 public:

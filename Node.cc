@@ -24,6 +24,7 @@ int Node::getName()
 
 void Node::printEdges()
 {
+    setDegree();
 	std::cout << "Node " << name << " is connected to the following nodes: " << std::endl;
 	std::map<Node*, int>::iterator iter;
 	if (edgeList.size() == 0)
@@ -34,7 +35,7 @@ void Node::printEdges()
 	{
 		for (iter = edgeList.begin(); iter != edgeList.end(); iter++)
 		{
-			std::cout << "N" << name << " - " << iter->second << " - N" << iter->first << std::endl;
+			std::cout << "N" << name << " - " << iter->second << " - N" << iter->first->getName() << std::endl;
 		}
 	}
 	std::cout << std::endl;
@@ -42,11 +43,13 @@ void Node::printEdges()
 
 int Node::getEdgeListSize()
 {
+    setDegree();
 	return (int)edgeList.size();
 }
 
 Node* Node::getMinimalDegreeNode()
 {
+    setDegree();
     for (std::map<Node*, int>::iterator iter = edgeList.begin(); iter != edgeList.end(); iter++)
     {
         iter->first->setDegree();
@@ -67,6 +70,7 @@ Node* Node::getMinimalDegreeNode()
  
 Node* Node::getNodeAtElement(int i)
 {
+    setDegree();
     std::map<Node*, int>::iterator iter = edgeList.begin();
     std::advance(iter, i);
     return iter->first;
@@ -74,6 +78,7 @@ Node* Node::getNodeAtElement(int i)
 
 void Node::setEdge(Node* n1, int weight)
 {
+    setDegree();
 	nodeList.insert(std::make_pair(n1, n1->getName()));
     edgeList[n1] = weight;
 //	if (edgeList[n1] == 0)
@@ -104,6 +109,7 @@ int Node::getDegree()
 
 int Node::getWeight(Node* n1)
 {
+    setDegree();
 	for (std::map<Node*, int>::iterator iter = edgeList.begin(); iter != edgeList.end(); iter++)
 	{
 		if (iter->first == n1)
@@ -117,6 +123,7 @@ int Node::getWeight(Node* n1)
 
 void Node::removeEdgeWeight(Node* n1, int amount)
 {
+    setDegree();
     for (std::map<Node*, int>::iterator iter = edgeList.begin(); iter != edgeList.end(); iter++)
 	{
 		if (iter->first == n1)

@@ -25,6 +25,7 @@ private:
 	int barCount1;
 	int barCount2;
 	void createCompleteGraph(int, int, int, std::string);
+	void createHypercubeGraph(int, int, int, std::string);
 	void parseMasterData();
 	void parsePlayerLogicalData();
 	void dataAnalysis(int);

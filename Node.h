@@ -18,7 +18,6 @@ public:
     //bool search(int);
 	int getEdgeListSize();
 	std::map<Node*, int> edgeList; //shows the node it's connected to, and the weight
-    std::unordered_map<Node*, int> nodeList;
     int getDegree();
     Node* getMinimalDegreeNode();
     void removeEdgeWeight(Node*, int);

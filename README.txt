@@ -1,11 +1,13 @@
 README
 Text-Based Graph Theory Logging Program
 
-This is a text-based game for running Monte Carlo simulations for Petersen Graphs and Complete Graphs (more in development). 
+This is a text-based game for running Monte Carlo simulations for Petersen Graphs and logical simulations Complete Graphs and Hypercubes of dimensions 2-4 (more in development). 
 
 For Petersen Graphs, This program allows the user to select the weight of the edges between the nodes. 
 
 For Complete Graphs, this program allows users to select the number of nodes and the weight between the nodes.
+
+For Hypercubes, this program allows users to select the dimension (2-4) and the weight between nodes.
 
 To run this on OS X, you need to install Xcode for the C++ compiler. 
 

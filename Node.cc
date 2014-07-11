@@ -4,8 +4,6 @@
 #include <map>
 #include <iostream>
 #include <algorithm>
-#include <unordered_map>
-
 
 Node::Node(int n)
 {
@@ -79,7 +77,6 @@ Node* Node::getNodeAtElement(int i)
 void Node::setEdge(Node* n1, int weight)
 {
     setDegree();
-	nodeList.insert(std::make_pair(n1, n1->getName()));
     edgeList[n1] = weight;
 //	if (edgeList[n1] == 0)
 //		destroyEdge(n1);
